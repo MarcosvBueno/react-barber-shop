@@ -4,16 +4,21 @@ import { Button } from "@/app/_components/ui/button";
 import { Barbershop } from "@prisma/client";
 import { ChevronLeftIcon, MenuIcon, MapPinIcon, StarIcon } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 interface BarbershopInfoProps {
     barbershop: Barbershop;
 }
 
 
 const BarbershopInfo = ({barbershop} : BarbershopInfoProps) => {
+    const router = useRouter();
+    const handleBackMenu = () =>{
+        router.back();
+    }
     return ( 
         <div>
         <div className="h-[256px] w-full relative">
-            <Button size="icon" variant="outline" className="absolute top-4 left-4 z-50">
+            <Button onClick={handleBackMenu} size="icon" variant="outline" className="absolute top-4 left-4 z-50">
             <ChevronLeftIcon size={24}  />
             </Button>
             <Button variant="outline" className="absolute top-4 right-4 z-50">
@@ -36,7 +41,9 @@ const BarbershopInfo = ({barbershop} : BarbershopInfoProps) => {
             <StarIcon size={16} className="fill-primary text-primary" />
             <p className="text-sm mt-2">5.0 (889 avaliações) </p>
             </div>
+            <div>
 
+            </div>
         </div>
     </div>
      );
