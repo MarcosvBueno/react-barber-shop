@@ -15,7 +15,7 @@ interface BarbershopInfoProps {
 const BarbershopInfo = ({barbershop} : BarbershopInfoProps) => {
     const router = useRouter();
     const handleBackMenu = () =>{
-        router.back();
+        router.replace("/");
     }
     return ( 
         <div>
