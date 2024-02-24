@@ -18,10 +18,12 @@ import Image from "next/image";
 import { useMemo, useState } from "react";
 import generateDayTimeList from "./_helpers/hour";
 import { format, setHours, setMinutes } from "date-fns";
-import Barbershops from "../page";
-import { Erica_One } from "next/font/google";
 import SaveBooking from "../_actions/save-booking";
 import { Loader2 } from "lucide-react";
+import { ToastAction } from "@/app/_components/ui/toast";
+import { toast } from "@/app/_components/ui/use-toast";
+import { useRouter } from "next/navigation";
+
 
 interface ServiceItemProps { 
   barbershop: Barbershop;
@@ -30,11 +32,12 @@ interface ServiceItemProps {
 }
 
 const ServiceItem = ({ service,barbershop,  isAuthenticated }: ServiceItemProps) => {
+  const router = useRouter();
   const {data} = useSession();
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [hour, setHour] = useState<string | undefined>();
   const [isSubmitLoading, setIsSubmitLoading] = useState<boolean>(false);
-
+  const [sheetIsOpen, setSheetIsOpen] = useState(false);
   const handleDateClick = (date: Date | undefined) => {
     setDate(date);
     setHour(undefined);
@@ -69,7 +72,16 @@ const ServiceItem = ({ service,barbershop,  isAuthenticated }: ServiceItemProps)
         userId: (data.user as any).id ,
       
       })
-      
+      setSheetIsOpen(false);
+      setHour(undefined);
+      setDate(undefined);
+      toast({
+        title: "Reserva feita com sucesso!",
+        description: format(newDate, "'para' dd 'de' MMMM 'às' HH':'mm'.'", { locale: ptBR }),
+        action: (
+          <ToastAction onClick={() => router.push('/bookings')} altText="Goto schedule to undo">Vizualizar</ToastAction>
+        ),
+      })
     } catch (error) {
       console.log(error)
     }finally{
@@ -108,7 +120,7 @@ const ServiceItem = ({ service,barbershop,  isAuthenticated }: ServiceItemProps)
                   currency: "BRL",
                 }).format(Number(service.price))}
               </p>
-              <Sheet>
+              <Sheet open={sheetIsOpen} onOpenChange={setSheetIsOpen}>
                 <SheetTrigger asChild>
                   <Button variant="secondary" onClick={handleBookingClick}>
                     Reservar
