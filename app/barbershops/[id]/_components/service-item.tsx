@@ -13,12 +13,15 @@ import {
 } from "@/app/_components/ui/sheet";
 import { Barbershop, Service } from "@prisma/client";
 import { ptBR } from "date-fns/locale";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import generateDayTimeList from "./_helpers/hour";
-import { format } from "date-fns";
+import { format, setHours, setMinutes } from "date-fns";
 import Barbershops from "../page";
+import { Erica_One } from "next/font/google";
+import SaveBooking from "../_actions/save-booking";
+import { Loader2 } from "lucide-react";
 
 interface ServiceItemProps { 
   barbershop: Barbershop;
@@ -27,8 +30,10 @@ interface ServiceItemProps {
 }
 
 const ServiceItem = ({ service,barbershop,  isAuthenticated }: ServiceItemProps) => {
+  const {data} = useSession();
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [hour, setHour] = useState<string | undefined>();
+  const [isSubmitLoading, setIsSubmitLoading] = useState<boolean>(false);
 
   const handleDateClick = (date: Date | undefined) => {
     setDate(date);
@@ -44,8 +49,33 @@ const ServiceItem = ({ service,barbershop,  isAuthenticated }: ServiceItemProps)
       return signIn();
     }
 
-    //TODO: abrir modal de agendamento
   };
+
+  const handleBookingSubmit = async () => {
+    setIsSubmitLoading(true);
+    try {
+      if(!date || !hour || !data?.user ){
+        return;
+      }
+      //hour : "09:45"
+      const dateHour = Number(hour.split(":")[0])
+      const dateMinutes = Number(hour.split(":")[1])
+      const newDate = setMinutes((setHours(date,dateHour)),dateMinutes)
+
+      await SaveBooking({
+        barbershopId: barbershop.id,
+        serviceId: service.id,
+        date: newDate,
+        userId: (data.user as any).id ,
+      
+      })
+      
+    } catch (error) {
+      console.log(error)
+    }finally{
+      setIsSubmitLoading(false);
+    }
+  }
 
   const timeList = useMemo(() => {
     return date ? generateDayTimeList(date) : [];
@@ -180,8 +210,10 @@ const ServiceItem = ({ service,barbershop,  isAuthenticated }: ServiceItemProps)
                   <SheetFooter className="px-5">
                         <Button
                             className="w-full"
-                            disabled={!date || !hour}
+                            disabled={!date || !hour || isSubmitLoading}
+                            onClick={handleBookingSubmit}
                         >
+                          {isSubmitLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                             Confirmar reserva
                         </Button>
                     </SheetFooter>
