@@ -12,7 +12,7 @@ interface SaveBookingProps {
 const SaveBooking = async(params : SaveBookingProps ) => {
     await db.booking.create({
         data: {
-            babershopId: params.barbershopId,
+            barbershopId: params.barbershopId,
             serviceId: params.serviceId,
             userId: params.userId,
             date: params.date,

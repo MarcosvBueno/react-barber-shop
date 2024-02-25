@@ -38,7 +38,6 @@ return (
                 <ServiceItem key={service.id} barbershop={barbershop} service={service} isAuthenticated={!!session?.user} />
             ))}
         </div>
-
     </div>
 );
 };
