@@ -19,7 +19,7 @@ const BookingItem = ( {booking} : BookingItemProps) => {
 
   return (
     <>
-      <Card>
+      <Card className="min-w-full">
         <CardContent className="py-0 flex px-0 ">
           <div className="gap-2 flex flex-col py-5 flex-[3] px-5">
             <Badge variant={isBookingConfirmed ? "default" : "outline"} className="w-fit">
