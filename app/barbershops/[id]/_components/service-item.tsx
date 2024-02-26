@@ -52,7 +52,7 @@ const ServiceItem = ({ service,barbershop,  isAuthenticated }: ServiceItemProps)
     }
     
     refeshAvailableHours();
-  }, [<barbershop className="id"></barbershop>, date]);
+  }, [barbershop.id, date]);
 
   const handleDateClick = (date: Date | undefined) => {
     setDate(date);
@@ -172,17 +172,23 @@ const ServiceItem = ({ service,barbershop,  isAuthenticated }: ServiceItemProps)
                   <div className="py-6 w-full">
                     <Calendar
                       mode="single"
+                      footer={false}
                       selected={date}
                       onSelect={handleDateClick}
                       locale={ptBR}
                       fromDate={new Date()}
+                     
                       styles={{
                         head_cell: {
                           width: "100%",
                           textTransform: "capitalize",
+                          
                         },
                         cell: {
                           width: "100%",
+                          textTransform: "capitalize",
+                          tableLayout: "fixed",
+                          
                         },
                         button: {
                           width: "100%",
