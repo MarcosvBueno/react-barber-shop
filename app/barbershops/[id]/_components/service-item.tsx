@@ -25,16 +25,19 @@ import { toast } from "@/app/_components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import GetDayBookings from "../_actions/get-day-bookings";
 
-
-interface ServiceItemProps { 
+interface ServiceItemProps {
   barbershop: Barbershop;
   service: Service;
   isAuthenticated: boolean;
 }
 
-const ServiceItem = ({ service,barbershop,  isAuthenticated }: ServiceItemProps) => {
+const ServiceItem = ({
+  service,
+  barbershop,
+  isAuthenticated,
+}: ServiceItemProps) => {
   const router = useRouter();
-  const {data} = useSession();
+  const { data } = useSession();
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [hour, setHour] = useState<string | undefined>();
   const [isSubmitLoading, setIsSubmitLoading] = useState<boolean>(false);
@@ -42,15 +45,15 @@ const ServiceItem = ({ service,barbershop,  isAuthenticated }: ServiceItemProps)
   const [dayBookings, setDayBookings] = useState<Booking[]>([]);
 
   useEffect(() => {
-    if(!date){
+    if (!date) {
       return;
     }
 
     const refeshAvailableHours = async () => {
       const dayBookings = await GetDayBookings(date, barbershop.id);
       setDayBookings(dayBookings);
-    }
-    
+    };
+
     refeshAvailableHours();
   }, [barbershop.id, date]);
 
@@ -67,43 +70,48 @@ const ServiceItem = ({ service,barbershop,  isAuthenticated }: ServiceItemProps)
     if (!isAuthenticated) {
       return signIn();
     }
-
   };
 
   const handleBookingSubmit = async () => {
     setIsSubmitLoading(true);
     try {
-      if(!date || !hour || !data?.user ){
+      if (!date || !hour || !data?.user) {
         return;
       }
       //hour : "09:45"
-      const dateHour = Number(hour.split(":")[0])
-      const dateMinutes = Number(hour.split(":")[1])
-      const newDate = setMinutes((setHours(date,dateHour)),dateMinutes)
+      const dateHour = Number(hour.split(":")[0]);
+      const dateMinutes = Number(hour.split(":")[1]);
+      const newDate = setMinutes(setHours(date, dateHour), dateMinutes);
 
       await SaveBooking({
         barbershopId: barbershop.id,
         serviceId: service.id,
         date: newDate,
-        userId: (data.user as any).id ,
-      
-      })
+        userId: (data.user as any).id,
+      });
       setSheetIsOpen(false);
       setHour(undefined);
       setDate(undefined);
       toast({
         title: "Reserva feita com sucesso!",
-        description: format(newDate, "'para' dd 'de' MMMM 'às' HH':'mm'.'", { locale: ptBR }),
+        description: format(newDate, "'para' dd 'de' MMMM 'às' HH':'mm'.'", {
+          locale: ptBR,
+        }),
         action: (
-          <ToastAction onClick={() => router.push('/bookings')} altText="Goto schedule to undo">Vizualizar</ToastAction>
+          <ToastAction
+            onClick={() => router.push("/bookings")}
+            altText="Goto schedule to undo"
+          >
+            Vizualizar
+          </ToastAction>
         ),
-      })
+      });
     } catch (error) {
-      console.log(error)
-    }finally{
+      console.log(error);
+    } finally {
       setIsSubmitLoading(false);
     }
-  }
+  };
 
   const timeList = useMemo(() => {
     if (!date) {
@@ -111,23 +119,20 @@ const ServiceItem = ({ service,barbershop,  isAuthenticated }: ServiceItemProps)
     }
 
     return generateDayTimeList(date).filter((time) => {
-
-      const dateHour = Number(time.split(":")[0])
-      const dateMinutes = Number(time.split(":")[1])
+      const dateHour = Number(time.split(":")[0]);
+      const dateMinutes = Number(time.split(":")[1]);
 
       const getBookingDate = dayBookings.find((booking) => {
         const bookingHour = booking.date.getHours();
         const bookingMinutes = booking.date.getMinutes();
 
         return bookingHour === dateHour && bookingMinutes === dateMinutes;
-
-      })
-      if(getBookingDate){
+      });
+      if (getBookingDate) {
         return false;
       }
       return true;
-
-    })
+    });
   }, [date, dayBookings]);
 
   return (
@@ -168,45 +173,34 @@ const ServiceItem = ({ service,barbershop,  isAuthenticated }: ServiceItemProps)
                   <SheetHeader className="text-left px-5 py-6 border-b border-solid border-secondary">
                     <SheetTitle>Fazer Reserva</SheetTitle>
                   </SheetHeader>
-
-                  <div className="py-6 w-full">
-                    <Calendar
+                  <div className="w-full">
+                  <Calendar
                       mode="single"
                       footer={false}
                       selected={date}
                       onSelect={handleDateClick}
                       locale={ptBR}
                       fromDate={new Date()}
-                     
+                      className="px-5 py-6 w-full flex items-center justify-center"
+                      style={{ width: '100%' }}
                       styles={{
                         head_cell: {
                           width: "100%",
                           textTransform: "capitalize",
-                          
                         },
                         cell: {
-                          width: "100%",
                           textTransform: "capitalize",
-                          tableLayout: "fixed",
-                          
-                        },
-                        button: {
                           width: "100%",
-                        },
-                        nav_button_previous: {
-                          width: "32px",
-                          height: "32px",
-                        },
-                        nav_button_next: {
-                          width: "32px",
-                          height: "32px",
                         },
                         caption: {
+                          width: "100%",
                           textTransform: "capitalize",
                         },
                       }}
                     />
                   </div>
+                    
+                 
 
                   {/* Mostrar horarios apenas quando eu tiver uma data selecionada */}
                   {date && (
@@ -247,31 +241,28 @@ const ServiceItem = ({ service,barbershop,  isAuthenticated }: ServiceItemProps)
                         {hour && (
                           <div className="flex justify-between">
                             <h3 className="text-sm text-gray-400">Horário</h3>
-                            <h4 className="text-sm">
-                              {hour}
-                            </h4>
+                            <h4 className="text-sm">{hour}</h4>
                           </div>
                         )}
                         <div className="flex justify-between">
-                            <h3 className="text-sm text-gray-400">Barbearia</h3>
-                            <h4 className="text-sm">
-                              {barbershop.name}
-                            </h4>
+                          <h3 className="text-sm text-gray-400">Barbearia</h3>
+                          <h4 className="text-sm">{barbershop.name}</h4>
                         </div>
                       </CardContent>
                     </Card>
-
                   </div>
                   <SheetFooter className="px-5">
-                        <Button
-                            className="w-full"
-                            disabled={!date || !hour || isSubmitLoading}
-                            onClick={handleBookingSubmit}
-                        >
-                          {isSubmitLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                            Confirmar reserva
-                        </Button>
-                    </SheetFooter>
+                    <Button
+                      className="w-full"
+                      disabled={!date || !hour || isSubmitLoading}
+                      onClick={handleBookingSubmit}
+                    >
+                      {isSubmitLoading && (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      )}
+                      Confirmar reserva
+                    </Button>
+                  </SheetFooter>
                 </SheetContent>
               </Sheet>
             </div>

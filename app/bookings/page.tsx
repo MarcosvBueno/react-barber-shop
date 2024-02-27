@@ -13,7 +13,7 @@ const Bookings = async() => {
        return  redirect('/');
     }
     
-    const [confirmedBookings,pastBookings] = await Promise.all([
+    const [confirmedBookings,finishedBookings] = await Promise.all([
         db.booking.findMany({
             where: {
                 userId: (session.user as any).id,
@@ -53,7 +53,7 @@ const Bookings = async() => {
         <div className="px-5 py-6">
             <h1 className="text-xl font-bold">Agendamentos</h1>
 
-            <h2 className="text-gray-400 uppercase font-bold text-sm mt-6 mb-3">Confirmados</h2>
+            {confirmedBookings.length === 0 && finishedBookings.length === 0 && (<h2 className="text-gray-400 uppercase font-bold text-sm mt-6 mb-3">Confirmados</h2>)}
             <div className="flex flex-col gap-3">
             {confirmedBookings.map((booking) => (
                 <BookingItem key={booking.id} booking={booking} />
@@ -62,7 +62,7 @@ const Bookings = async() => {
 
             <h2 className="text-gray-400 uppercase font-bold text-sm mt-6 mb-3">Finalizados</h2>
             <div className="flex flex-col gap-3">
-            {pastBookings.map((booking) => (
+            {finishedBookings.map((booking) => (
                 <BookingItem key={booking.id} booking={booking} />
             ))}
             </div>
