@@ -5,7 +5,7 @@ import { Badge } from "./ui/badge";
 import { Card, CardContent } from "./ui/card";
 import { format, isFuture } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet";
+import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet";
 import Image from "next/image";
 import Barbershops from "../barbershops/[id]/page";
 import { Button } from "./ui/button";
@@ -14,6 +14,7 @@ import { toast } from "./ui/use-toast";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { ToastAction } from "./ui/toast";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "./ui/alert-dialog";
 
 interface BookingItemProps {
   booking: Prisma.BookingGetPayload<{
@@ -149,19 +150,38 @@ const BookingItem = ( {booking} : BookingItemProps) => {
                             </h4>
                         </div>
                       </CardContent>
-                    </Card>
-                  <div className="flex gap-3 w-full mt-6">
+            </Card>
+
+                  <SheetFooter className="flex gap-3 w-full mt-6">
                     <SheetClose asChild>
                     <Button className="w-full" variant="secondary">Voltar</Button>
                     </SheetClose>
-                            {isDeleteLoading && (
+            
+                    
+                    <AlertDialog>
+                    <AlertDialogTrigger>
+                    {isDeleteLoading && (
                               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                             )}
-                    <Button onClick={handleCancelClick} className="w-full" variant="destructive" disabled={!isBookingConfirmed || isDeleteLoading}>Cancelar Reserva</Button>
-                          
-                  </div>
+                    <Button className="w-full" variant="destructive" disabled={!isBookingConfirmed || isDeleteLoading}>Cancelar Reserva</Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent className="w-[90%]">
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Deseja mesmo cancelar essa reserva</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Uma vez cancelada, não será possível reverter essa ação.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter className="flex flex-row gap-3">
+                        <AlertDialogCancel className="w-full mt-0">Voltar</AlertDialogCancel>
+                        <AlertDialogAction className="w-full" disabled={isDeleteLoading} onClick={handleCancelClick}>Confirmar</AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                  </SheetFooter>
+                 
             </div>
-      </SheetContent>
+            </SheetContent>
     </Sheet>
     </>
   );

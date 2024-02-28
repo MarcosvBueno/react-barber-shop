@@ -10,7 +10,7 @@ const CancelBooking = async(bookingId : string) => {
             id: bookingId
         }
     })
-
+    revalidatePath('/')
     revalidatePath('/bookings')
 }
  
