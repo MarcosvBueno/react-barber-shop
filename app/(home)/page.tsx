@@ -7,6 +7,7 @@ import { db } from "../_lib/prisma";
 import BarbershopItem from "./_components/barbershop-item";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../_lib/auth";
+import Image from "next/image";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -35,20 +36,28 @@ export default async function Home() {
   ]);
 
   return (
-    <div>
+    <>
       <Header />
+      <div className=" lg:w-full lg:h-[450px] lg:bg-cover lg:-z-10 lg:relative  " style={{backgroundImage: "url(/banner-barbershop.jpeg)"}}></div>
+
+      <div className="lg:px-36">
+     
+      <div className="lg:absolute lg:top-40  lg:z-10">
+
       <div className="px-5 pt-5">
-        <h2 className="font-bold text-xl ">{session?.user ? `Olá, ${session.user.name?.split(" ")[0]}` : "Olá vamos agendar um corte hoje!!"}</h2>
-        <p className="capitalize text-sm">
+        <h2 className="font-bold text-xl lg:text-2xl">{session?.user ? `Olá, ${session.user.name?.split(" ")[0]}` : "Olá vamos agendar um corte hoje!!"}</h2>
+        <p className="capitalize text-sm lg:text-xl">
           {format(new Date(), "EEEE', 'd 'de' MMMM ", {
             locale: ptBR,
           })}
         </p>
       </div>
+
       <div className="px-5 mt-6">
         <Search />
       </div>
-      <div className="mt-6">
+
+      <div className="mt-6 lg:w-[600px]">
         {confirmedBookings.length > 0 && (
           <>
             <h2 className=" pl-5 text-sm uppercase text-gray-400 font-bold mb-3">
@@ -61,14 +70,20 @@ export default async function Home() {
             </div>
           </>
         )}
+       
       </div>
+      
+      </div>
+
+
+      
       <div className="mt-6">
         <h2 className="px-5 text-sm uppercase text-gray-400 font-bold mb-3">
           Recomendados
         </h2>
         <div className=" px-5 flex flex-row gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden">
           {barbershop.map((barbershop) => (
-            <div key={barbershop.id} className="min-w-[167px] max-w-[167px]">
+            <div key={barbershop.id} className="sm:min-w-[167px] sm:max-w-[167px] md:min-w-[280px] md:max-w-[280px]">
                 <BarbershopItem  barbershop={barbershop} />
             </div>
            
@@ -81,7 +96,7 @@ export default async function Home() {
         </h2>
         <div className=" px-5 flex flex-row gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden">
         {recommendedBarbershops.map((barbershop) => (
-            <div key={barbershop.id} className="min-w-[167px] max-w-[167px]">
+            <div key={barbershop.id} className="sm:min-w-[167px] sm:max-w-[167px] md:min-w-[280px] md:max-w-[280px]">
                 <BarbershopItem  barbershop={barbershop} />
             </div>
            
@@ -89,5 +104,6 @@ export default async function Home() {
         </div>
       </div>
     </div>
+    </>
   );
 }
