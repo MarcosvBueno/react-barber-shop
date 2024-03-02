@@ -17,7 +17,7 @@ import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import generateDayTimeList from "./_helpers/hour";
-import { format, setHours, setMinutes } from "date-fns";
+import { addDays, format, setHours, setMinutes } from "date-fns";
 import SaveBooking from "../_actions/save-booking";
 import { Loader2 } from "lucide-react";
 import { ToastAction } from "@/app/_components/ui/toast";
@@ -180,7 +180,7 @@ const ServiceItem = ({
                       selected={date}
                       onSelect={handleDateClick}
                       locale={ptBR}
-                      fromDate={new Date()}
+                      fromDate={addDays(new Date(), 1)}
                       className="px-5 py-6 w-full flex items-center justify-center"
                       style={{ width: '100%' }}
                       styles={{
