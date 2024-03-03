@@ -19,29 +19,18 @@ const BarbershopInfo = ({barbershop} : BarbershopInfoProps) => {
     }
     return ( 
         <div>
-        <div className="h-[256px] w-full relative">
+        <div className="h-[256px] w-full relative lg:container">
 
-            <Button onClick={handleBackMenu} size="icon" variant="outline" className="absolute top-4 left-4 z-50">
+            <Button onClick={handleBackMenu} size="icon" variant="outline" className="absolute top-4 left-4 z-50 ">
             <ChevronLeftIcon size={24}  />
             </Button>
 
-
-            <Sheet>
-          <SheetTrigger asChild>
-          <Button variant="outline" className="absolute top-4 right-4 z-50">
-            <MenuIcon size={24}  />
-            </Button>
-          </SheetTrigger>
-          <SheetContent className="p-0">
-            <SideMenu />
-          </SheetContent>
-        </Sheet>
         <Image src={barbershop.imageUrl} alt={barbershop.name} layout="fill" style={{
             objectFit: "cover"
         }} 
-        className="opacity-75"/>
+        className="opacity-75 rounded-2xl"/>
         </div>
-        <div className="px-5 pt-3 pb-6 border-b border-solid border-primary">
+        <div className="px-5 pt-3 pb-6 border-b border-solid border-primary lg:container">
             <h1 className="font-bold text-2xl">{barbershop.name}</h1>
 
             <div className="flex items-center gap-1 mt-2">

@@ -76,13 +76,13 @@ export default async function Home() {
 
 
       
-      <div className="mt-6">
+      <div className="mt-6 ">
         <h2 className="px-5 text-sm uppercase text-gray-400 font-bold mb-3">
           Recomendados
         </h2>
         <div className=" px-5 flex flex-row gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden">
           {barbershop.map((barbershop) => (
-            <div key={barbershop.id} className="sm:min-w-[167px] sm:max-w-[167px] md:min-w-[280px] md:max-w-[280px]">
+            <div key={barbershop.id} className="sm:min-w-[167px] sm:max-w-[167px] md:min-w-[237px]  md:max-w-[237px] max-w-[167px] min-w-[167px] w-full">
                 <BarbershopItem  barbershop={barbershop} />
             </div>
            
@@ -95,7 +95,7 @@ export default async function Home() {
         </h2>
         <div className=" px-5 flex flex-row gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden">
         {recommendedBarbershops.map((barbershop) => (
-            <div key={barbershop.id} className="sm:min-w-[167px] sm:max-w-[167px] md:min-w-[280px] md:max-w-[280px]">
+            <div key={barbershop.id} className=" sm:min-w-[167px] sm:max-w-[167px] md:min-w-[237px]  md:max-w-[237px] max-w-[167px] min-w-[167px] w-full">
                 <BarbershopItem  barbershop={barbershop} />
             </div>
            
