@@ -17,7 +17,7 @@ import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import generateDayTimeList from "./_helpers/hour";
-import { addDays, format, setHours, setMinutes } from "date-fns";
+import { addDays, format, isWeekend, setHours, setMinutes } from "date-fns";
 import SaveBooking from "../_actions/save-booking";
 import { Loader2 } from "lucide-react";
 import { ToastAction } from "@/app/_components/ui/toast";
@@ -138,7 +138,7 @@ const ServiceItem = ({
   return (
     <Card>
       <CardContent className="p-3">
-        <div className="flex gap-4 items-center">
+        <div className="flex gap-3 items-center">
           <div className="relative h-[110px] w-[110px] min-w-[110px] max-h-[110px] max-w-[110px]">
             <Image
               src={service.imageUrl}
@@ -151,11 +151,11 @@ const ServiceItem = ({
             />
             <p>{service.name}</p>
           </div>
-          <div className="flex flex-col  w-full ">
+          <div className="flex flex-col gap-2 flex-1">
             <h2 className="font-bold">{service.name}</h2>
             <p className="text-sm text-gray-400">{service.description}</p>
 
-            <div className="flex items-center justify-between mt-3">
+            <div className="flex items-center justify-between ">
               <p className="text-primary text-sm font-bold">
                 {Intl.NumberFormat("pt-BR", {
                   style: "currency",
@@ -169,40 +169,29 @@ const ServiceItem = ({
                   </Button>
                 </SheetTrigger>
 
-                <SheetContent className="p-0">
+                <SheetContent className="p-0 overflow-hidden flex flex-col gap-0 divide-y divide-secondary ">
                   <SheetHeader className="text-left px-5 py-6 border-b border-solid border-secondary">
                     <SheetTitle>Fazer Reserva</SheetTitle>
                   </SheetHeader>
-                  <div className="w-full">
-                  <Calendar
-                      mode="single"
-                      footer={false}
-                      selected={date}
-                      onSelect={handleDateClick}
-                      locale={ptBR}
-                      fromDate={addDays(new Date(), 1)}
-                      className="px-5 py-6 w-full flex items-center justify-center"
-                      style={{ width: '100%' }}
-                      styles={{
-                        head_cell: {
-                          width: "100%",
-                          textTransform: "capitalize",
-                        },
-                        cell: {
-                          textTransform: "capitalize",
-                          width: "100%",
-                        },
-                        caption: {
-                          width: "100%",
-                          textTransform: "capitalize",
-                        },
-                      }}
-                    />
-                  </div>
-                    
-                 
 
-                  {/* Mostrar horarios apenas quando eu tiver uma data selecionada */}
+
+                  <Calendar
+                    mode="single"
+                    locale={ptBR}
+                    selected={date}
+                    onSelect={setDate}
+                    fromDate={addDays(new Date(), 1)}
+                    disabled={(date) => isWeekend(date)}
+                    classNames={{
+                      head_cell: "w-full text-sm md:min-w-[50px] text-center capitalize",
+                      cell: " !font-bold  w-full capitalize",
+                      nav_button_previous: "w-8 h-8 relative inset-0 rounded-lg disabled:bg-transparent bg-secondary",
+                      nav_button_next: "w-8 h-8 relative inset-0 rounded-lg disabled:bg-transparent bg-secondary",
+                      caption: "capitalize flex justify-between items-center w-full",
+                      root: "min-w-full px-5 py-6",
+                    }}
+                  />
+
                   {date && (
                     <div className="flex gap-3 px-5 py-6 border-t border-solid border-secondary overflow-x-scroll [&::-webkit-scrollbar]:hidden">
                       {timeList.map((time) => (
