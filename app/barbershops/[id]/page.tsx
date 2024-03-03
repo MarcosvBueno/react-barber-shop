@@ -33,7 +33,7 @@ const services = barbershop.services;
 return (
     <div>
         <BarbershopInfo barbershop={barbershop} />
-        <div className="px-5 flex flex-col gap-4 py-6">
+        <div className="px-5 flex flex-col gap-4 py-6 lg:container lg:grid lg:grid-cols-2">
         {services.map((service) => (
                 <ServiceItem key={service.id} barbershop={barbershop} service={service} isAuthenticated={!!session?.user} />
             ))}

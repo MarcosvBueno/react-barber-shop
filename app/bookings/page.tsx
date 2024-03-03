@@ -43,9 +43,7 @@ const Bookings = async () => {
   // const pastBookings = bookings.filter((booking) => isPast(booking.date));
   return (
     <>
-      <Header />
-
-      <div className="px-40 py-6">
+      <div className="px-40 py-6 lg:container">
         <h1 className="text-xl font-bold mb-6">Agendamentos</h1>
 
         {confirmedBookings.length > 0 && (

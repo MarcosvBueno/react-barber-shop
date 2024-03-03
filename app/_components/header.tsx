@@ -22,9 +22,9 @@ const Header = () => {
 
   return (
     <Card>
-      <CardContent className="p-5 lg:px-40 justify-between flex flex-row items-center ">
+      <CardContent className="p-5 lg:container justify-between flex flex-row items-center ">
        <Link href="/">
-       <Image src="/logo.svg" alt="logo" width={180} height={120} />
+       <Image src="/logo.svg" alt="logo" width={130} height={120} />
         </Link>
 
         <div className="hidden lg:flex items-center gap-6">

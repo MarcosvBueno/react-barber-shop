@@ -37,10 +37,9 @@ export default async function Home() {
 
   return (
     <>
-      <Header />
-      <div className=" lg:w-full lg:h-[450px] lg:bg-cover lg:-z-10 lg:relative  " style={{backgroundImage: "url(/banner-barbershop.jpeg)"}}></div>
+      <div className=" lg:w-full lg:h-[450px] lg:bg-cover lg:-z-10 lg:relative saturate-0 brightness-[.35] " style={{backgroundImage: "url(/banner-barbershop.jpeg)"}}></div>
 
-      <div className="lg:px-36">
+      <div className="lg:container">
      
       <div className="lg:absolute lg:top-40  lg:z-10">
 
